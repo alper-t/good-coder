@@ -22,10 +22,14 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Package Installer (poetry)
+      - name: Poetry Installer
         uses: snok/install-poetry@v1
         with:
           installer-parallel: true
+
+      - name: Package Installer (poetry)
+        shell: bash
+        run: poetry install --no-interaction --no-root
 
       - name: Linter (ruff)
         shell: bash
