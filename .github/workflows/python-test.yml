@@ -1,0 +1,45 @@
+name: Application
+
+on:
+  push:
+
+
+permissions:
+  id-token: write
+  contents: read
+
+
+jobs:
+
+  application:
+    name: Application Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Poetry Installer
+        uses: snok/install-poetry@v1
+        with:
+          installer-parallel: true
+
+      - name: Package Installer (poetry)
+        shell: bash
+        run: poetry install --no-interaction --no-root
+
+      - name: Linter (ruff)
+        shell: bash
+        run: poetry run ruff format
+
+      - name: Type Checks (mypy)
+        shell: bash
+        run: poetry run mypy .
+
+      - name: Unit Tests (pytest)
+        shell: bash
+        run: |
+          poetry run pytest --cov=./ tests/
